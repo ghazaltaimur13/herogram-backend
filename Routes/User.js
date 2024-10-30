@@ -4,7 +4,6 @@ const UserController = require("../Controllers/UserController")
 module.exports = function (app, authMiddleware, validators) {
     app.post(
         "/api/login", 
-        express.static(path.join(__dirname, 'uploads')),
         UserController.login
     ),
     app.post(
