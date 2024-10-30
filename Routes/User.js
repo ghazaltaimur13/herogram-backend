@@ -1,6 +1,7 @@
 const FileController = require("../Controllers/FileController")
 const UserController = require("../Controllers/UserController")
 const express = require("express")
+const path = require("path");
 
 module.exports = function (app, authMiddleware, validators) {
     app.post(
