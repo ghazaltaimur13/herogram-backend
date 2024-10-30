@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+require("dotenv").config()
 
 class FileController extends Controller {}
 
@@ -38,6 +39,7 @@ FileController.uploadFiles = [
             id: uuidv4(),
             filename: file.filename,
             tags: tags[index] ? tags[index].split(",") : [], // Handle tags based on index
+            url: `${process.env.BACKEND_URL}/uploads/${file.filename}`, // Adjust according to your domain and routing
             uploadedAt: new Date().toISOString(),
           };
           files.push(fileData);
@@ -45,7 +47,10 @@ FileController.uploadFiles = [
         });
   
         writeFiles(files);
-        res.status(201).json({ message: "Files uploaded successfully", uploadedFiles });
+        res.status(201).json({ 
+            message: "Files uploaded successfully",         
+            uploadedFiles: uploadedFiles.map(file => ({ ...file, url: file.url })), // Include the URL in the response
+        });
       } catch (error) {
         console.error("Error uploading files:", error);
         res.status(500).json({ error: "Failed to upload files" });
