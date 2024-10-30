@@ -20,5 +20,9 @@ module.exports = function (app, authMiddleware, validators) {
         "/api/trackFiles",
         authMiddleware,
         FileController.trackFiles
+    ),
+    app.post(
+        "/api/signup", 
+        UserController.signup
     )
 }
