@@ -7,8 +7,8 @@ require("dotenv").config()
 
 class FileController extends Controller {}
 
-const filesFilePath = path.join(__dirname, "../Data/files.json");
-const statsFilePath = path.join(__dirname, "../Data/stats.json");
+const filesFilePath = path.join(__dirname, "../Data/Files.json");
+const statsFilePath = path.join(__dirname, "../Data/Stats.json");
 
 const storage = multer.diskStorage({
   destination: "./uploads",
