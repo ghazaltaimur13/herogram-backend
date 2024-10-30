@@ -52,6 +52,7 @@ FileController.uploadFiles = [
             tags: tags[index] ? tags[index].split(",") : [], // Handle tags based on index
             url: `${req.protocol}://${req.get('host')}/uploads/${file.filename}`, // Dynamically create the URL
             uploadedAt: new Date().toISOString(),
+            email: req.user.email
           };
           files.push(fileData);
           return fileData;
@@ -60,7 +61,6 @@ FileController.uploadFiles = [
         writeFiles(files);
         res.status(201).json({ 
             message: "Files uploaded successfully",         
-            uploadedFiles: uploadedFiles.map(file => ({ ...file, url: file.url })), // Include the URL in the response
         });
       } catch (error) {
         console.error("Error uploading files:", error);
@@ -69,17 +69,29 @@ FileController.uploadFiles = [
     },
   ];
 
-FileController.read = async (req, res) => {
-  try {
-    const files = readFiles();
-    res.json(files);
-  } catch (error) {
-    console.error("Error reading files:", error);
-    res.status(500).json({ error: "Failed to read files" });
-  }
-};
+  FileController.readFiles = async (req, res) => {
+    try {
+      const files = readFiles();  // Read the files data
+      const stats = readStats();   // Read the stats data
+  
+      // Merge files with their corresponding stats
+      const filesWithStats = files.map(file => {
+        const stat = stats.find(s => s.fileId === file.id); // Assuming file.id matches stat.fileId
+        return {
+          ...file,
+          views: stat ? stat.views : 0, // Default to 0 if no stats found
+        };
+      });
+  
+      res.json(filesWithStats); // Send the combined data
+    } catch (error) {
+      console.error("Error reading files:", error);
+      res.status(500).json({ error: "Failed to read files" });
+    }
+  };
+  
 
-FileController.track = async (req, res) => {
+FileController.trackFiles = async (req, res) => {
   try {
     const { fileId } = req.body;
     const stats = readStats();
