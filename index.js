@@ -7,7 +7,7 @@ const AuthMiddleware = require("./Middleware/Auth/AuthMiddleware");
 const port = process.env.PORT || '4000';
 
 const allowedOrigins = [
-    "http://138.68.70.115:3000",
+    "http://138.68.70.115",
 ]
 
 const options = {
