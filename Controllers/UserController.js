@@ -67,10 +67,7 @@ UserController.signup = async (req, res) => {
         // Check if the user already exists
         const existingUser = users.find(u => u.email === email);
         if (existingUser) {
-            return res.json({
-                status: false,
-                error: 'User already exists',
-            })
+            return res.status(500).json({ error: 'User already exists' });
         }
 
         // Hash the password
