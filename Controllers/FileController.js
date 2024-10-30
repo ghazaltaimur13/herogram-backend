@@ -50,7 +50,7 @@ FileController.uploadFiles = [
             id: uuidv4(),
             filename: file.filename,
             tags: tags[index] ? tags[index].split(",") : [], // Handle tags based on index
-            url: `${req.protocol}://${req.get('host')}/uploads/${file.filename}`, // Dynamically create the URL
+            url: `${process.env.BACKEND_URL}/uploads/${file.filename}`, // Dynamically create the URL
             uploadedAt: new Date().toISOString(),
             email: req.user.email
           };
