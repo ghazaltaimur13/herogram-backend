@@ -13,6 +13,17 @@ const statsFilePath = path.join(__dirname, "../data/stats.json");
 const storage = multer.diskStorage({
   destination: "./uploads",
   filename: (req, file, cb) => cb(null, `${uuidv4()}-${file.originalname}`),
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|mp4/; // Allowed file extensions
+    const isMimeTypeValid = allowedTypes.test(file.mimetype);
+    const isExtNameValid = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (isMimeTypeValid && isExtNameValid) {
+      return cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only JPEG, PNG, GIF, PDF, and MP4 are allowed.'));
+    }
+  },
 });
 
 const upload = multer({ storage });
@@ -39,7 +50,7 @@ FileController.uploadFiles = [
             id: uuidv4(),
             filename: file.filename,
             tags: tags[index] ? tags[index].split(",") : [], // Handle tags based on index
-            url: `${process.env.BACKEND_URL}/uploads/${file.filename}`, // Adjust according to your domain and routing
+            url: `${req.protocol}://${req.get('host')}/uploads/${file.filename}`, // Dynamically create the URL
             uploadedAt: new Date().toISOString(),
           };
           files.push(fileData);
