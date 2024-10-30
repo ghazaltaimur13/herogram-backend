@@ -4,10 +4,10 @@ const cors = require("cors")
 const app = express()
 const AuthMiddleware = require("./Middleware/Auth/AuthMiddleware");
 
-const port = process.env.PORT || '5000';
+const port = process.env.PORT || '4000';
 
 const allowedOrigins = [
-    "http://localhost:3000",
+    "http://138.68.70.115:3000",
 ]
 
 const options = {
@@ -20,6 +20,6 @@ require("./Routes/User")(app, AuthMiddleware);
 
 console.log(`Node environment: ${process.env.NODE_ENV}`)
 app.listen(port, () => {
-    console.log(`Example app listening at port http://localhost:${port}`)
+    console.log(`Example app listening at port http://138.68.70.115:${port}`)
 })
 
